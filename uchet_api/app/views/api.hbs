@@ -1,0 +1,104 @@
+<h3>RestAPI for Part4 services</h3>
+<h4>Auth / Method post (path - /)</h4>
+<h5>signup</h5>
+<ul>
+    <li>Регистрация</li>
+    <li>
+        Значения в body обязательные <b>email</b> и <b>password</b>
+    </li>
+    <li>
+        Возвращает полный список пользователя с токеном
+    </li>
+</ul>
+<h5>sigin</h5>
+<ul>
+    <li>Регистрация</li>
+    <li>
+        Значения в body обязательные <b>email</b> и <b>password</b>
+    </li>
+    <li>
+        Возвращает полный список пользователя с токеном
+    </li>
+</ul>
+<h4>API / Get methods (path - /api/) / Authorization Bearer + token</h4>
+<h5>company</h5>
+<ul>
+    <li>Возвращает список компаний</li>
+    <li>
+        <code>
+            [
+                {
+                    "id": 1,
+                    "name": "Утконос"
+                },
+            ]
+        </code>
+    </li>
+</ul>
+
+<h5>address</h5>
+<ul>
+    <li>Возвращает список всех адресов либо список адресов компании, необязательный параметр <b>?company_id</b></li>
+    <li>
+        <code>
+            [
+                {
+                    "id": 2,
+                    "company_id": 2,
+                    "address": "Кусковская ул., 20А, Москва (пом XIIа ком 135 эт. 6)",
+                    "identification": "00000001",
+                    "description": null
+                }
+            ]
+        </code>
+    </li>
+</ul>
+
+<h5>members</h5>
+<ul>
+    <li>Возвращает список сотрудников по параметру <b>?company_id</b> и уточнению необязательным параметорм <b>?address_id</b></li>
+    <li>
+        <code>
+            [
+            {
+            "id": 1,
+            "name": "Василиса Петровна",
+            "company_id": 1,
+            "position": "менеджер",
+            "phone": "79995554433",
+            "address_id": 1
+            }
+            ]
+        </code>
+    </li>
+</ul>
+
+<h5>status</h5>
+<ul>
+    <li></li>
+    <li>
+        <code>
+
+        </code>
+    </li>
+</ul>
+
+<h5></h5>
+<ul>
+    <li></li>
+    <li>
+        <code>
+
+        </code>
+    </li>
+</ul>
+
+<h5></h5>
+<ul>
+    <li></li>
+    <li>
+        <code>
+
+        </code>
+    </li>
+</ul>

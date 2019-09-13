@@ -1,0 +1,28 @@
+{
+  "development": {
+    "logging": false,
+    "database": "uchet",
+    "username": "uchet",
+    "password": "18121983",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+
+  "test": {
+    "logging": false,
+    "database": "uchet",
+    "username": "uchet",
+    "password": "18121983",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+
+  "production": {
+    "logging": false,
+    "database": "uchet",
+    "username": "uchet",
+    "password": "18121983",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}

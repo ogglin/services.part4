@@ -1,0 +1,262 @@
+<form [formGroup]="formMain" (ngSubmit)="onSubmit()" class="form-inline p-4">
+  <div class="row w-100">
+    <div class="col-4">
+      <div class="form-group">
+        <mat-form-field class="w-100">
+          <input type="text" placeholder="Компания" aria-label="Number" matInput [formControl]="company"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+            <mat-option *ngFor="let option of filteredCompany | async" [value]="option.name"
+                        (click)="onChange('cid', option.id)">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="addresses.length" class="form-group">
+        <mat-form-field class="w-100">
+          <input type="text" placeholder="Адрес" aria-label="Number" matInput [formControl]="address"
+                 [matAutocomplete]="autoa">
+          <mat-autocomplete #autoa="matAutocomplete" autoActiveFirstOption>
+            <mat-option *ngFor="let option of filteredAddress | async" [value]="option.name"
+                        (click)="onChange('aid', option.id)">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="members.length" class="form-group">
+        <mat-form-field class="w-100">
+          <input type="text" placeholder="Сотрудник" aria-label="Number" matInput [formControl]="member"
+                 [matAutocomplete]="autom">
+          <mat-autocomplete #autom="matAutocomplete" autoActiveFirstOption>
+            <mat-option *ngFor="let option of filteredMembers | async" [value]="option.name"
+                        (click)="onChange('mid', option.id)">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="form-group">
+        <mat-form-field class="w-100">
+          <input type="text" placeholder="Устройства" aria-label="Number" matInput [formControl]="deviceL"
+                 [matAutocomplete]="autodl">
+          <mat-autocomplete #autodl="matAutocomplete" autoActiveFirstOption>
+            <mat-option *ngFor="let option of filteredDeviceList | async" [value]="option.device_title"
+                        (click)="onChange('did', option.id)">
+              {{option.device_title}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="form-group" *ngIf="deviceL.value !== ''">
+        <mat-form-field class="m-1">
+          <input type="text" matInput placeholder="S/N" [formControl]="sn">
+        </mat-form-field>
+        <mat-form-field class="m-1">
+          <input type="text" matInput placeholder="Артикл" [formControl]="article">
+        </mat-form-field>
+        <mat-form-field class="m-1">
+          <input type="text" matInput placeholder="Инветарный номер" [formControl]="invnum">
+        </mat-form-field>
+        <mat-form-field class="m-1">
+          <input type="number" matInput placeholder="Напечатано" [formControl]="pageCount">
+        </mat-form-field>
+        <mat-form-field class="m-1">
+          <input type="number" matInput placeholder="Отсканировано" [formControl]="scanCount">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="form-group">
+        <mat-form-field class="w-100">
+          <input type="text" placeholder="Работы" aria-label="Number" matInput [formControl]="workL"
+                 [matAutocomplete]="autow">
+          <mat-autocomplete #autow="matAutocomplete" autoActiveFirstOption>
+            <mat-option *ngFor="let option of filteredWorkList | async" [value]="option.name"
+                        (click)="setWorks(option.name)">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="mb-2 w-100" *ngIf="works !== ''">
+          <textarea matInput placeholder="Список работ" [value]="works"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="w-100">
+          <input type="text" placeholder="Расходники" aria-label="Number" matInput [formControl]="expense"
+                 [matAutocomplete]="autode">
+          <mat-autocomplete #autode="matAutocomplete" autoActiveFirstOption>
+            <mat-option *ngFor="let option of filteredDeviceExpense | async" [value]="option.device_title"
+                        (click)="setExpense(option.device_title, option.device_price)">
+              {{option.device_title}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <form [formGroup]="expenseForm">
+          <mat-form-field *ngFor="let elem of expenseArr;" class="m-1">
+            <input [placeholder]="elem.title" matInput type="number" [formControlName]="elem.control"
+                   (change)="changeExpense(elem.control, $event.target.value)">
+            <mat-hint align="end">{{elem.price}} / руб.</mat-hint>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="form-group" *ngIf="totalSumma > 0">
+        Всего затрат на сумму: {{totalSumma}} руб.
+      </div>
+    </div>
+    <div class="form-group col-12">
+      <mat-form-field class="mr-3">
+        <input matInput [matDatepicker]="picker1" placeholder="Дата от" [formControl]="dateLine">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="mr-3">
+        <input matInput type="time" placeholder="время " [formControl]="dateTime">
+      </mat-form-field>
+      <mat-form-field class="mr-3">
+        <mat-label>Инженер</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let option of engineers" [value]="option.id" (click)="onChange('engid', option.id)">
+            {{option.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="mr-3">
+        <mat-label>Статус</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let option of statuses" [value]="option.id" (click)="onChange('statid', option.id)">
+            {{option.status}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button type="submit" mat-raised-button class="ml-5" [disabled]="isAddValid" (click)="addDeviceHistory()">
+        Добавить
+      </button>
+    </div>
+  </div>
+
+</form>
+
+<div class="row">
+  <div class="col-12">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Фильтр" class="w-100">
+    </mat-form-field>
+  </div>
+  <div class="col-12">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="devHisSource" matSort class="w-100">
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="article">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Артикл</th>
+          <td mat-cell *matCellDef="let row"> {{row.article}} </td>
+        </ng-container>
+
+        <!-- Progress Column -->
+        <ng-container matColumnDef="company">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Компания</th>
+          <td mat-cell *matCellDef="let row"> {{row.company}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="device">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Устройтво</th>
+          <td mat-cell *matCellDef="let row"> {{row.device}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="serial_number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> S/N</th>
+          <td mat-cell *matCellDef="let row"> {{row.serial_number}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="inventory_number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Инв. №</th>
+          <td mat-cell *matCellDef="let row"> {{row.inventory_number}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="print">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Печать</th>
+          <td mat-cell *matCellDef="let row"> {{row.print}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="scan">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Скан</th>
+          <td mat-cell *matCellDef="let row"> {{row.scan}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="resource">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Ресурс</th>
+          <td mat-cell *matCellDef="let row"> {{row.resource}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="partcode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Парткод</th>
+          <td mat-cell *matCellDef="let row"> {{row.partcode}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="works">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Работы</th>
+          <td mat-cell *matCellDef="let row"> {{row.works}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="expense">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Затраты</th>
+          <td mat-cell *matCellDef="let row"> {{row.expense}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="summa">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Сумма</th>
+          <td mat-cell *matCellDef="let row"> {{row.summa}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Дата</th>
+          <td mat-cell *matCellDef="let row"> {{row.date}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Статус</th>
+          <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+        </ng-container>
+
+        <!--  Column -->
+        <ng-container matColumnDef="enginer">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Инженер</th>
+          <td mat-cell *matCellDef="let row"> {{row.enginer}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="devHisTable"></tr>
+        <tr mat-row *matRowDef="let row; columns: devHisTable;" class="dev_history_row" (click)="tableClick(row)">
+        </tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+  </div>
+</div>

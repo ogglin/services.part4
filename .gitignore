@@ -59,3 +59,5 @@ typings/
 
 # next.js build output
 .next
+/uchet_api/node_modules
+/uchet_front/node_modules

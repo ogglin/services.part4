@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col w-100 text-right">
+    <label>
+      <span (click)="handleToggle('dev-task')">Устройства</span>
+      <mat-slide-toggle
+        class=""
+        (click)="handleToggle('dev-task')"
+      >
+      </mat-slide-toggle>
+      <span (click)="handleToggle('dev-task')">Задачи</span>
+    </label>
+  </div>
+</div>
+
+<app-devices *ngIf="isDevice && deviceHistory" [deviceHistory]="deviceHistory" [companies]="companies"
+             [addresses]="addresses" [statuses]="statuses" [engineers]="engineers" [workList]="workList"
+             [deviceList]="deviceList" [uID]="uID" (body)="addDeviceHistory($event)"
+>
+</app-devices>
+<app-tasks *ngIf="!isDevice && tasks" [tasks]="tasks" [companies]="companies" [addresses]="addresses"
+            [statuses]="statuses" [uID]="uID"
+>
+</app-tasks>

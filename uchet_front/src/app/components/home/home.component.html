@@ -1,0 +1,8 @@
+<div class="container-fluid">
+  <ng-container *ngIf="isSignIn">
+    <app-uchet-main></app-uchet-main>
+  </ng-container>
+  <ng-container *ngIf="!isSignIn">
+    <app-signin></app-signin>
+  </ng-container>
+</div>
