@@ -17,3 +17,10 @@ td.mat-cell, td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
 td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
   display: none;
 }
+.table{
+  &_overflow{
+    max-height: calc(100vh - 300px);
+    height: calc(100vh - 300px);
+    overflow-y: scroll;
+  }
+}

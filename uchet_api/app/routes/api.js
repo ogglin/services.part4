@@ -291,9 +291,10 @@ module.exports = function (app) {
 
     /* Put company address */
     app.put('/api/address', isLoggedIn, multipart.array(), function (req, res) {
-        pa = "INSERT INTO company_address (company_id ,address, identification, description) VALUES (";
-        if (req.body['company_id'] && req.body['address']) {
-            pa = pa + req.body['company_id'] + ", '" + req.body['address'] + "'";
+        console.log(req.body);
+        pa = "INSERT INTO company_address (company_id, name, identification, description) VALUES (";
+        if (req.body['company_id'] && req.body['name']) {
+            pa = pa + req.body['company_id'] + ", '" + req.body['name'] + "'";
             if (req.body['identification']) {
                 pa = pa + ", '" + req.body['identification'] + "'";
             } else {
@@ -305,6 +306,7 @@ module.exports = function (app) {
                 pa = pa + ", ''";
             }
             pa = pa + ")";
+            console.log(pa);
             (async () => {
                 const client = await pool.connect();
                 try {
@@ -365,13 +367,22 @@ module.exports = function (app) {
     /* Put new devicelist */
     app.put('/api/devicelist', isLoggedIn, multipart.array(), function (req, res) {
         pdl = "INSERT INTO device_spr (device_title, device_type, device_resource, device_partcode, device_price) VALUES ( ";
-        if (req.body['device_title'] && req.body['device_type'] && req.body['device_resource'] && req.body['device_partcode']) {
-            pdl = pdl + "'" + req.body['device_title'] + "', '" + req.body['device_type'] + "', '" + req.body['device_resource']
-                + "', '" + req.body['device_partcode'];
-            if (req.body['device_price']) {
-                pdl = pdl + "', '" + req.body['device_price'] + "'"
+        if (req.body['device_title'] && req.body['device_type']) {
+            pdl = pdl + "'" + req.body['device_title'] + "', '" + req.body['device_type'] + "'";
+            if (req.body['device_resource']){
+                pdl = pdl + ", '" + req.body['device_resource'] + "'";
             } else {
-                pdl = pdl + "', " + null
+                pdl = pdl + ", " + null
+            }
+            if (req.body['device_partcode']) {
+                pdl = pdl + ", '" + req.body['device_partcode'] + "'";
+            } else {
+                pdl = pdl + ", " + null
+            }
+            if (req.body['device_price']) {
+                pdl = pdl + ", '" + req.body['device_price'] + "'"
+            } else {
+                pdl = pdl + ", " + null
             }
             pdl = pdl + ")";
             (async () => {
@@ -402,6 +413,52 @@ module.exports = function (app) {
                 const client = await pool.connect();
                 try {
                     const result = await client.query(pd);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'title_id, serial_number, article and inventory_number is required'});
+        }
+    });
+
+    /* Put new status */
+    app.put('/api/status', isLoggedIn, multipart.array(), function (req, res) {
+        ps = "INSERT INTO status_spr (status) VALUES ( '";
+        if (req.body['status']) {
+            ps = ps + req.body['status'] + "')";
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(ps);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'title_id, serial_number, article and inventory_number is required'});
+        }
+    });
+
+    /* Put new work in worklist */
+    app.put('/api/worklist', isLoggedIn, multipart.array(), function (req, res) {
+        pw = "INSERT INTO works_spr (name) VALUES ( '";
+        if (req.body['name']) {
+            pw = pw + req.body['name'] + "')";
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(pw);
                     rslt = result.rows;
                     return res.send({result: 'success'});
                 } finally {
@@ -447,7 +504,7 @@ module.exports = function (app) {
             } else {
                 pdh = pdh + ", null"
             }
-            if (req.body['date_time']) { pdh += ", '"+req.body['date_time']+"'"} else {
+            if (req.body['date_time']) { pdh += ", '"+req.body['date_time']+"')"} else {
                 pdh = pdh + ", '" + n + "')";
             }
             console.log(pdh);
@@ -533,7 +590,6 @@ module.exports = function (app) {
                pot += "'" + n + "'";
            }
            pot += ") WHERE id =" + req.body['id'];
-           console.log(pot);
            (async () => {
                const client = await pool.connect();
                try {
@@ -551,6 +607,205 @@ module.exports = function (app) {
            res.send({error: 'id is required'});
        }
     });
+    /* Edit company */
+    app.post('/api/company', isLoggedIn, isAdmin, multipart.array(), function (req, res) {
+       if(req.body['id'] && req.body['name']) {
+           qec = "UPDATE company SET name = '" + req.body['name'] + "' WHERE id =" + req.body['id'];
+           console.log(qec);
+           (async () => {
+               const client = await pool.connect();
+               try {
+                   const result = await client.query(qec);
+                   rslt = result.rows;
+                   return res.send({result: 'success'});
+               } finally {
+                   client.release()
+               }
+           })().catch(e => {
+               console.log(e.stack);
+               return res.send({error: e.detail})
+           });
+       } else {
+           res.send({error: 'id is required'});
+       }
+    });
+    /* Edit company address */
+    app.post('/api/address', isLoggedIn, isAdmin, multipart.array(), function (req, res) {
+        qpa = "UPDATE company_address SET (company_id, name, identification, description) = (";
+        if (req.body['company_id'] && req.body['name']) {
+            qpa = qpa + req.body['company_id'] + ", '" + req.body['name'] + "'";
+            if (req.body['identification']) {
+                qpa = qpa + ", '" + req.body['identification'] + "'";
+            } else {
+                qpa = qpa + ", ''";
+            }
+            if (req.body['description']) {
+                qpa = qpa + ", '" + req.body['description'] + "'";
+            } else {
+                qpa = qpa + ", ''";
+            }
+            qpa = qpa + ")  WHERE id =" + req.body['id'];
+            console.log(qpa);
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(qpa);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'company_id and address required'});
+        }
+    });
+    /* Edit members of company */
+    app.post('/api/members', isLoggedIn, isAdmin, multipart.array(), function (req, res) {
+        qpm = "UPDATE company_member SET (name, company_id, address_id, position, phone) = (";
+        if (req.body['name'] && req.body['company_id']) {
+            qpm = qpm + "'" + req.body['name'] + "', " + req.body['company_id'];
+            if (req.body['address_id']) {
+                qpm = qpm + ", " + req.body['address_id'];
+            } else {
+                qpm = qpm + ", " + null;
+            }
+            if (req.body['position']) {
+                qpm = qpm + ", '" + req.body['position'] + "'";
+            } else {
+                qpm = qpm + ", ''"
+            }
+            if (req.body['phone']) {
+                qpm = qpm + ", '" + req.body['phone'] + "'";
+            } else {
+                qpm = qpm + ", ''"
+            }
+            qpm = qpm + ") WHERE id =" + req.body['id'];
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(qpm);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'name and company_id is required'});
+        }
+    });
+    /* Put new devicelist */
+    app.post('/api/devicelist', isLoggedIn, multipart.array(), function (req, res) {
+        pdl = "UPDATE device_spr SET (device_title, device_type, device_resource, device_partcode, device_price) = ( ";
+        if (req.body['device_title'] && req.body['device_type']) {
+            pdl = pdl + "'" + req.body['device_title'] + "', '" + req.body['device_type'] + "'";
+            if (req.body['device_resource']){
+                pdl = pdl + ", '" + req.body['device_resource'] + "'";
+            } else {
+                pdl = pdl + ", " + null
+            }
+            if (req.body['device_partcode']) {
+                pdl = pdl + ", '" + req.body['device_partcode'] + "'";
+            } else {
+                pdl = pdl + ", " + null
+            }
+            if (req.body['device_price']) {
+                pdl = pdl + ", '" + req.body['device_price'] + "'"
+            } else {
+                pdl = pdl + ", " + null
+            }
+            pdl = pdl + ") WHERE id =" + req.body['id'];
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(pdl);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'title_id, serial_number, article and inventory_number is required'});
+        }
+    });
+//-----
+
+//Delete's
+    /* Delete company */
+    app.delete('/api/company', isLoggedIn, isAdmin, function (req, res) {
+        if(req.query['id']) {
+            dqc = "DELETE FROM company WHERE id="+req.query['id'];
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(dqc);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'id is required'});
+        }
+    });
+    /* Delete address */
+    app.delete('/api/address', isLoggedIn, isAdmin, function (req, res) {
+        if(req.query['id']) {
+            dqa = "DELETE FROM company_address WHERE id="+req.query['id'];
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(dqa);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'id is required'});
+        }
+    });
+    /* Delete members */
+    app.delete('/api/members', isLoggedIn, isAdmin, function (req, res) {
+        if(req.query['id']) {
+            dqa = "DELETE FROM company_member WHERE id="+req.query['id'];
+            (async () => {
+                const client = await pool.connect();
+                try {
+                    const result = await client.query(dqa);
+                    rslt = result.rows;
+                    return res.send({result: 'success'});
+                } finally {
+                    client.release()
+                }
+            })().catch(e => {
+                console.log(e.stack);
+                return res.send({error: e.detail})
+            });
+        } else {
+            res.send({error: 'id is required'});
+        }
+    });
+
 //-----
     // custom callback
     var options = { // not required
@@ -571,7 +826,7 @@ module.exports = function (app) {
 
     function isAdmin(req, res, next) {
         passport.authenticate('bearer', options, function (error, user, info) {
-            if (user.role_id === 1) {
+            if (user.role_id === 1 || user.role_id === 2) {
                 return next();
             } else {
                 res.send('Authentication failure ');

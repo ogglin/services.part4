@@ -1,0 +1,89 @@
+<div class="row">
+  <div class="col-auto">
+    <mat-form-field>
+      <input type="text" matInput [formControl]="device" placeholder="Устройство">
+    </mat-form-field>
+  </div>
+  <div class="col-auto">
+    <mat-form-field>
+      <input type="text" matInput [formControl]="resource" placeholder="Ресурс">
+    </mat-form-field>
+  </div>
+  <div class="col-auto">
+    <mat-form-field>
+      <input type="text" matInput [formControl]="partcode" placeholder="Парткод">
+    </mat-form-field>
+  </div>
+  <div class="col-auto">
+    <mat-form-field>
+      <input type="text" matInput [formControl]="price" placeholder="Цена">
+    </mat-form-field>
+  </div>
+  <div class="col-auto">
+    <mat-form-field>
+      <mat-label>Тип</mat-label>
+      <mat-select [formControl]="type">
+        <mat-option [value]="'printer'">Принтер</mat-option>
+        <mat-option [value]="'cartridge'">Картридж</mat-option>
+        <mat-option [value]="'consumable'">Расходник</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-auto">
+    <button mat-raised-button color="primary" *ngIf="device.value" (click)="handleAdd()">Добавить</button>
+  </div>
+  <div class="col-auto">
+    <button mat-raised-button color="warn" *ngIf="dId" (click)="handleSave()">Сохранить</button>
+  </div>
+</div>
+
+<div class="table_overflow">
+  <table mat-table [dataSource]="deviceList" class="mat-elevation-z8 w-100">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="device_title">
+      <th mat-header-cell *matHeaderCellDef> Название</th>
+      <td mat-cell *matCellDef="let element"> {{element.device_title}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="device_resource">
+      <th mat-header-cell *matHeaderCellDef> Ресурс</th>
+      <td mat-cell *matCellDef="let element"> {{element.device_resource}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="device_partcode">
+      <th mat-header-cell *matHeaderCellDef> Парткод</th>
+      <td mat-cell *matCellDef="let element"> {{element.device_partcode}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="device_price">
+      <th mat-header-cell *matHeaderCellDef> Цена</th>
+      <td mat-cell *matCellDef="let element"> {{element.device_price}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="device_type">
+      <th mat-header-cell *matHeaderCellDef> Тип</th>
+      <td mat-cell *matCellDef="let element"> {{element.device_type}} </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> &nbsp;</th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        <button mat-button color="warn" [disabled]="true">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="deviceTitle"></tr>
+    <tr mat-row *matRowDef="let row; columns: deviceTitle;" (click)="handleEdit(row)"></tr>
+  </table>
+</div>

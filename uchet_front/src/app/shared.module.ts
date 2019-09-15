@@ -30,6 +30,15 @@ import {MatNativeDateModule} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-adapter";
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { AdminComponent } from './components/admin/admin.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
+import { CompaniesComponent } from './components/admin/companies/companies.component';
+import { AddressesComponent } from './components/admin/addresses/addresses.component';
+import { PersonalsComponent } from './components/admin/personals/personals.component';
+import { WorksComponent } from './components/admin/works/works.component';
+import { StatusesComponent } from './components/admin/statuses/statuses.component';
+import {DevicesListComponent} from "./components/admin/devices-list/devices-list.component";
 
 const material = [
   MatFormFieldModule,
@@ -45,11 +54,15 @@ const material = [
   MatSlideToggleModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatMomentDateModule
+  MatMomentDateModule,
+  MatSidenavModule,
+  MatListModule
 ];
 
 @NgModule({
-  declarations: [HomeComponent, SigninComponent, SignupComponent, UchetMainComponent, AutocompleteComponent, ButtonComponent, DevicesComponent, TasksComponent],
+  declarations: [HomeComponent, SigninComponent, SignupComponent, UchetMainComponent, AutocompleteComponent,
+    ButtonComponent, DevicesComponent, TasksComponent, AdminComponent, CompaniesComponent, AddressesComponent,
+    PersonalsComponent, WorksComponent, StatusesComponent, DevicesListComponent],
   imports: [
     CommonModule,
     AngularFireModule.initializeApp(environment.firebase),

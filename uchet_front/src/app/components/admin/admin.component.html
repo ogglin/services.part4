@@ -1,0 +1,44 @@
+<mat-drawer-container class="vh-100">
+  <mat-drawer mode="side" opened>
+    <mat-list>
+      <mat-list-item>
+        <button mat-stroked-button (click)="handleTab('company')">Компании</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-stroked-button (click)="handleTab('address')">Адреса</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-stroked-button (click)="handleTab('personal')">Персонал</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-stroked-button (click)="handleTab('works')">Работы</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-stroked-button (click)="handleTab('devices')">Устройства</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-stroked-button (click)="handleTab('statuses')">Статусы</button>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content class="p-3">
+    <ng-container [ngSwitch]="curTab">
+      <app-companies *ngSwitchCase="'company'" [companies]="companies" (item)="handleElem($event)"
+      ></app-companies>
+      <app-addresses *ngSwitchCase="'address'" [companies]="companies" [addresses]="addresses" (item)="handleElem($event)"
+      ></app-addresses>
+      <app-personals *ngSwitchCase="'personal'" [companies]="companies" [addresses]="addresses" [members]="members"
+                     (cid)="handleCompany($event)" (item)="handleElem($event)"
+      ></app-personals>
+      <app-works *ngSwitchCase="'works'" [workList]="workList" (item)="handleElem($event)"
+      ></app-works>
+      <app-devices-list *ngSwitchCase="'devices'" [deviceList]="deviceList" (item)="handleElem($event)"
+      ></app-devices-list>
+      <app-statuses *ngSwitchCase="'statuses'" [statuses]="statuses" (item)="handleElem($event)"
+      ></app-statuses>
+      <app-companies *ngSwitchDefault [companies]="companies" (item)="handleElem($event)"
+      ></app-companies>
+    </ng-container>
+
+  </mat-drawer-content>
+</mat-drawer-container>

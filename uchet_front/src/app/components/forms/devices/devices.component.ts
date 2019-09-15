@@ -183,6 +183,7 @@ export class DevicesComponent implements OnInit {
     this.address.reset('');
     this._req.getAddresses(this.cid).subscribe(res=>{
       this.addresses = res;
+      this.address.setValue(this.addresses[0]['name']);
     })
   }
 
@@ -190,7 +191,6 @@ export class DevicesComponent implements OnInit {
     this.member.reset('');
     this._req.getMembers(this.cid, this.aid).subscribe(res => {
       this.members = res;
-      console.log(this.members);
     });
   }
 
@@ -210,7 +210,7 @@ export class DevicesComponent implements OnInit {
       device_id: this.did,
       status_id: this.statid,
       service_engineer: this.engid,
-      list_works: '"' + this.works + '"',
+      list_works: this.works,
       page_count: this.pageCount.value,
       scan_count: this.scanCount.value,
       total_summa: this.totalSumma,
@@ -221,7 +221,12 @@ export class DevicesComponent implements OnInit {
   }
 
   setWorks(work) {
-    this.works += work+'; ';
+    if(this.works.length) {
+      this.works += ',\n"'+work+'"';
+    } else {
+      this.works += '"'+work+'"';
+    }
+
   }
 
   setExpense(title, price){
@@ -286,4 +291,20 @@ export class DevicesComponent implements OnInit {
     console.log(this.company.value);
   }
 
+  handleClear(){
+    this.company.setValue('');
+    this.address.setValue('');
+    this.member.setValue('');
+    this.deviceL.setValue('');
+    this.sn.reset();
+    this.article.reset();
+    this.invnum.reset();
+    this.pageCount.reset();
+    this.scanCount.reset();
+    this.workL.setValue('');
+    this.works = '';
+    this.expense.setValue('');
+    this.expenseForm.reset();
+    this.totalSumma = 0;
+  }
 }

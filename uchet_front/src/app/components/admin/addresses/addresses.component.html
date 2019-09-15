@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-auto">
+    <mat-form-field>
+      <mat-label>Выберите компанию</mat-label>
+      <mat-select [formControl]="company">
+        <mat-option *ngFor="let item of companies" [value]="item.id">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col">
+    <mat-form-field class="w-100">
+      <input matInput type="text" [formControl]="address" placeholder="Адрес">
+    </mat-form-field>
+  </div>
+  <div class="col-auto">
+    <mat-form-field>
+      <input matInput type="text" [formControl]="ident" placeholder="Идентификатор">
+    </mat-form-field>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-form-field class="w-100">
+      <textarea matInput type="text" [formControl]="desc" placeholder="Описание"></textarea>
+    </mat-form-field>
+  </div>
+</div>
+<div class="row">
+  <button mat-raised-button color="primary" class="mx-3" (click)="handleAdd()" [disabled]="!isValid">Добавить</button>
+  <button mat-raised-button color="warn" class="mx-3" (click)="handleSave()" *ngIf="aID" [disabled]="!isValid">Сохранить</button>
+</div>
+
+<table mat-table [dataSource]="addresses" class="mat-elevation-z8 w-100 mt-5">
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- ID Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> ID</th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Адрес</th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="company">
+    <th mat-header-cell *matHeaderCellDef> Компания</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngFor="let item of companies">
+        <ng-container *ngIf="item.id === element.company_id">
+          {{item.name}}
+        </ng-container>
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="ident">
+    <th mat-header-cell *matHeaderCellDef> Идент</th>
+    <td mat-cell *matCellDef="let element"> {{element.identification}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="desc">
+    <th mat-header-cell *matHeaderCellDef> Описание</th>
+    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+  </ng-container>
+
+  <!-- Action Column -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> &nbsp;</th>
+    <td mat-cell *matCellDef="let element" class="text-right">
+      <button mat-button (click)="handleDelete(element.id)" color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="addressTitle"></tr>
+  <tr mat-row *matRowDef="let row; columns: addressTitle;" (click)="handleEdit(row)"></tr>
+</table>

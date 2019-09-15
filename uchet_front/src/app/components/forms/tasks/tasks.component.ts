@@ -228,4 +228,17 @@ export class TasksComponent implements OnInit {
       });
     }
   }
+  handleClear() {
+    this.company.setValue('');
+    this.address.setValue('');
+    this.member.setValue('');
+    this.taskTitle.reset();
+    this.taskDesc.reset();
+    this.dateLine.reset();
+    this.dateTime.reset();
+    this.deadLine.reset();
+    this.deadTime.reset();
+    this.statid = null;
+
+  }
 }

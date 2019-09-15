@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col w-100 text-right">
-    <label>
+    <button *ngIf="isRole" mat-raised-button (click)="handleToggle('admin')" class="m-2 float-left">Редактор</button>
+    <label *ngIf="!isAdmin">
       <span (click)="handleToggle('dev-task')">Устройства</span>
       <mat-slide-toggle
         class=""
@@ -12,12 +13,18 @@
   </div>
 </div>
 
-<app-devices *ngIf="isDevice && deviceHistory" [deviceHistory]="deviceHistory" [companies]="companies"
+<app-devices *ngIf="!isAdmin && isDevice && deviceHistory" [deviceHistory]="deviceHistory" [companies]="companies"
              [addresses]="addresses" [statuses]="statuses" [engineers]="engineers" [workList]="workList"
              [deviceList]="deviceList" [uID]="uID" (body)="addDeviceHistory($event)"
 >
 </app-devices>
-<app-tasks *ngIf="!isDevice && tasks" [tasks]="tasks" [companies]="companies" [addresses]="addresses"
+
+<app-tasks *ngIf="!isAdmin && !isDevice && tasks" [tasks]="tasks" [companies]="companies" [addresses]="addresses"
             [statuses]="statuses" [uID]="uID"
 >
 </app-tasks>
+
+<app-admin *ngIf="isAdmin" [companies]="companies" [addresses]="addresses" [statuses]="statuses" [uID]="uID"
+           [deviceList]="deviceList" [engineers]="engineers" [workList]="workList" [members]="members"
+           (elem)="handleItem($event)" (cid)="getMembers($event)"
+></app-admin>
