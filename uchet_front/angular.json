@@ -67,7 +67,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "part4-uchet:build"
+            "browserTarget": "part4-uchet:build",
+            "port": 3000
           },
           "configurations": {
             "production": {
