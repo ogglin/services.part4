@@ -46,7 +46,7 @@ export class TasksComponent implements OnInit {
   @Input() uID: number;
   @ViewChild(MatPaginator, {static: true}) paginatorTask: MatPaginator;
   @ViewChild(MatSort, {static: true}) sortTask: MatSort;
-  @HostListener('click', ['$event.target'])
+  @HostListener('click')
   handleValidate() {
     if (this.cid && this.statid && this.taskTitle) {
       this.isAddValid = false;

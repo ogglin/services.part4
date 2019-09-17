@@ -20,7 +20,7 @@ export class PersonalsComponent implements OnInit {
   cId: number;
   mID: number;
   isValid: boolean = false;
-  @HostListener('click', ['$event.target'])
+  @HostListener('click')
   handleValidate() {
     if (this.cId) {
       this.isValid = true;

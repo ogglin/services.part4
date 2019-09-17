@@ -64,7 +64,7 @@ export class DevicesComponent implements OnInit {
   @Output() body = new EventEmitter<object>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @HostListener('click', ['$event.target'])
+  @HostListener('click')
   handleValidate() {
     if (this.cid && this.did && this.statid && this.engid && (this.pageCount || this.scanCount || this.works)) {
       this.isAddValid = false;

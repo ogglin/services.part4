@@ -17,7 +17,7 @@ export class AddressesComponent implements OnInit {
   aID: number;
   addressTitle: string[] = ['id', 'name', 'company', 'ident', 'desc', 'action'];
   isValid: boolean = false;
-  @HostListener('click', ['$event.target'])
+  @HostListener('click')
   handleValidate() {
     if (this.address.value && this.company.value) {
       this.isValid = true;
