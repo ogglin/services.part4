@@ -1,0 +1,26 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "global/global";
+
+
+.dev_history {
+  &_row {
+    &:hover {
+      background-color: burlywood;
+      cursor: pointer;
+    }
+  }
+}
+td.mat-cell, td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+  padding: 0 5px !important;
+}
+td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+  display: none;
+}
+.table{
+  &_overflow{
+    max-height: calc(100vh - 300px);
+    height: calc(100vh - 300px);
+    overflow-y: scroll;
+  }
+}
