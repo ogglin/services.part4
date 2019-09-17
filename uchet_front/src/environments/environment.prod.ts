@@ -12,5 +12,5 @@ export const environment = {
   gfClientId: '177386660212-5fo4hhak9eo35qilvpg4ittbsh5h9m81.apps.googleusercontent.com',
   gfSecret: 'eSxkXW4EJM6KIyEgaUCM-a_2',
   apiUrl: 'http://services.part4.info:50101/api/',
-  host: 'http://services.part4.info:50101/api/'
+  host: 'http://services.part4.info:50101/'
 };
